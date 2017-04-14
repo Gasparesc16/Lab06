@@ -10,6 +10,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 
 public class MeteoController {
+	
+	private Model model;
 
 	@FXML
 	private ResourceBundle resources;
@@ -28,6 +30,14 @@ public class MeteoController {
 
 	@FXML
 	private TextArea txtResult;
+	
+	
+	public void setModel(Model model) {
+		
+		this.model= model;
+		
+		
+	}
 
 	@FXML
 	void doCalcolaSequenza(ActionEvent event) {
