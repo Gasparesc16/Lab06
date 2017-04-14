@@ -41,12 +41,81 @@ public class MeteoDAO {
 
 	public List<Rilevamento> getAllRilevamentiLocalitaMese(int mese, String localita) {
 
-		return null;
+		final String sql = "SELECT Localita, Data, Umidita "+ 
+		                   "FROM situazione "+ 
+				           "ORDER BY Localita, data ASC";
+
+		List<Rilevamento> rilevamenti = new ArrayList<Rilevamento>();
+
+		try {
+			Connection conn = DBConnect.getInstance().getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				Rilevamento r = new Rilevamento(rs.getString("Localita"), rs.getDate("Data"), rs.getInt("Umidita"));
+				rilevamenti.add(r);
+			}
+
+			conn.close();
+			return rilevamenti;
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
+	
 	public Double getAvgRilevamentiLocalitaMese(int mese, String localita) {
+		
+		
+		final String sql = "SELECT Localita, Data, Umidita "+ 
+		                   "FROM situazione  "+ 
+			               "GROUP BY Localita, Data";
 
-		return 0.0;
+		List<Rilevamento> rilevamenti = new ArrayList<Rilevamento>();
+
+		try {
+			Connection conn = DBConnect.getInstance().getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+	
+			ResultSet rs = st.executeQuery();
+	
+			while (rs.next()) {
+	
+				Rilevamento r = new Rilevamento(rs.getString("Localita"), rs.getDate("Data"), rs.getInt("Umidita"));
+				rilevamenti.add(r);
+			}
+	
+			conn.close();
+			
+	
+		} catch (SQLException e) {
+	
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		
+		
+		double media =0.0;
+		int cont = 0;
+		
+		for(Rilevamento r: rilevamenti){
+		
+			if(r.getLocalita().equals(localita) && r.getData().getMonth() == mese){
+				media += r.getUmidita();
+				cont++;
+			}
+		
+			
+		}
+		
+		return media/cont;
 	}
 
 }

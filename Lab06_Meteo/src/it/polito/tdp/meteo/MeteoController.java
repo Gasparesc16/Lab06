@@ -20,7 +20,7 @@ public class MeteoController {
 	private URL location;
 
 	@FXML
-	private ChoiceBox<?> boxMese;
+	private ChoiceBox<Integer> boxMese;
 
 	@FXML
 	private Button btnCalcola;
@@ -46,6 +46,14 @@ public class MeteoController {
 
 	@FXML
 	void doCalcolaUmidita(ActionEvent event) {
+		
+		int mese = boxMese.getValue();
+		
+		if( mese == 0 )
+			return;
+		
+		txtResult.appendText(model.getUmiditaMedia(mese));
+		
 
 	}
 
